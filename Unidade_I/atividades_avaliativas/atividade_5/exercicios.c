@@ -29,7 +29,6 @@
  */
 
 #include "raylib.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -158,15 +157,6 @@ void ordenarEntidades(Entidade** e, int quantidade){
 		}
 	}
 
-/*	
-	int d;
-	printf("[");
-	for(int i=0;i<quantidade;i++){
-		printf("%.0f ",distancia(e[0],e[i]));
-	}
-	printf("]\n");
-	scanf("%d",&d);
-*/
 }
 
 bool colidiu(Entidade *a, Entidade *b) {
@@ -230,12 +220,7 @@ int main(void) {
 
 
 			
-		//if(GetKeyPressed() != 0){
-		//	TraceLog(LOG_INFO, "%d \t %d", IsKeyPressed(KEY_SPACE),KEY_SPACE);
-	
-
-		if(IsKeyPressed(KEY_SPACE)){
-        //if (GetKeyPressed()==KEY_SPACE) { //Isso resolve, talvez a funcao IsKeyPressed() tem problemas
+		if(IsKeyPressed(KEY_SPACE)){//Funciona no PC, logo o problema deve estar no teclado bluetooth ou no Termux
             // atira no primeiro inimigo vivo encontrado no vetor de ponteiros
             for (int i = 1; i < totalEntidades; i++) {
                 Entidade *e = vetorEntidades[i];
@@ -251,7 +236,6 @@ int main(void) {
        }
 
 		if(IsKeyPressed(KEY_N)){
-		//if(GetKeyPressed()==KEY_N){
 			Vector2 pos = { GetRandomValue(30, LARGURA_JANELA - 30), GetRandomValue(30, ALTURA_JANELA - 30) };
     	    adicionarEntidade(criarEntidade(ENTIDADE_ITEM, pos));
 		}
