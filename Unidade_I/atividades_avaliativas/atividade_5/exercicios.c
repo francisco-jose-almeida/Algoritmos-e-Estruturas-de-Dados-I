@@ -29,6 +29,7 @@
  */
 
 #include "raylib.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -118,7 +119,7 @@ void removerEntidade(int indice) {
 float distancia(Entidade* a, Entidade* b){
     float dx = a->pos.x - b->pos.x;
     float dy = a->pos.y - b->pos.y;
-    return sqrtf(dx * dx + dy * dy);
+	return sqrtf(dx * dx + dy * dy);
 }
 
 void ordenarEntidades(Entidade** e, int quantidade){
@@ -157,6 +158,15 @@ void ordenarEntidades(Entidade** e, int quantidade){
 		}
 	}
 
+/*	
+	int d;
+	printf("[");
+	for(int i=0;i<quantidade;i++){
+		printf("%.0f ",distancia(e[0],e[i]));
+	}
+	printf("]\n");
+	scanf("%d",&d);
+*/
 }
 
 bool colidiu(Entidade *a, Entidade *b) {
@@ -218,26 +228,34 @@ int main(void) {
             }
         }
 
-		int key=GetKeyPressed();
-	if(key != 0){
-		TraceLog(LOG_INFO, "Key pressed is: %d", key);
-	}
 
-        if (IsKeyPressed(KEY_SPACE)) {
+			
+		//if(GetKeyPressed() != 0){
+		//	TraceLog(LOG_INFO, "%d \t %d", IsKeyPressed(KEY_SPACE),KEY_SPACE);
+	
+
+		if(IsKeyDown(KEY_SPACE)){
+        //if (GetKeyPressed()==KEY_SPACE) { //Isso resolve, talvez a funcao IsKeyPressed() tem problemas
             // atira no primeiro inimigo vivo encontrado no vetor de ponteiros
             for (int i = 1; i < totalEntidades; i++) {
                 Entidade *e = vetorEntidades[i];
-                if (e->tipo != ENTIDADE_INIMIGO) {continue;}
-//                if (!colidiu(jogador, e) && e->raio > 0) {
+				if (e->tipo != ENTIDADE_INIMIGO) continue;
+                if (!colidiu(jogador, e) && e->raio > 0) {
                     e->vida -= 20;
                     if (e->vida <= 0) {
                         removerEntidade(i);
                     }
                     break;
-  //              }
+                }
             }
-        }
+       }
 
+		if(IsKeyDown(KEY_N)){
+		//if(GetKeyPressed()==KEY_N){
+			Vector2 pos = { GetRandomValue(30, LARGURA_JANELA - 30), GetRandomValue(30, ALTURA_JANELA - 30) };
+    	    adicionarEntidade(criarEntidade(ENTIDADE_ITEM, pos));
+		}
+		
         BeginDrawing();
             ClearBackground(RAYWHITE);
 
@@ -247,7 +265,7 @@ int main(void) {
 
             DrawText(TextFormat("Vida: %d   Pontuacao: %d", jogador->vida, pontuacao), 10, 10, 22, DARKGRAY);
             DrawText(TextFormat("Entidades ativas: %d", totalEntidades), 10, 34, 18, GRAY);
-            DrawText("Setas movem | ESPACO atira | ESC sai", 10, ALTURA_JANELA - 25, 16, GRAY);
+            DrawText("Setas movem | ESPACO atira | N add ITEM | ESC sai", 10, ALTURA_JANELA - 25, 16, GRAY);
 
         EndDrawing();
     }
