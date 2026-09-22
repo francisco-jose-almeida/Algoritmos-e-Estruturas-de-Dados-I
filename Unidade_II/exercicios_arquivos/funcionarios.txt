@@ -1,0 +1,4 @@
+== Informacoes ==
+id: 56
+nome: 
+salario:R$ -0.00
