@@ -1,0 +1,6 @@
+-------------------
+nome: rafael nonato
+nota: 2.50
+-------------------
+nome: outro aluno
+nota: 10.00

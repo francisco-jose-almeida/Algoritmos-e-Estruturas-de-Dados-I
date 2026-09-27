@@ -1,0 +1,2 @@
+nome: bananana,preco: R$12.50
+nome: macana,preco: R$10.05

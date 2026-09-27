@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct{
-    char nome[50];
+    char nome[128];
     float nota;
 }Aluno;
 
@@ -11,7 +11,7 @@ int main(){
     int quantidade_alunos=0;
 
 
-    FILE* arq=fopen("alunos.txt","a");
+    FILE* arq=fopen("alunos.txt","w");
     
     if(arq==NULL){
         printf("ERRO: Impossivel criar o arquivo!");
@@ -34,7 +34,7 @@ int main(){
         
 
         printf("Informe o nome do aluno:\n>>");
-        scanf(" %s",alunos[i].nome);
+        scanf(" %[^\n]",alunos[i].nome);
         fprintf(arq,"nome: %s\n",alunos[i].nome);
 
         printf("Informe a nota do aluno:\n>>");
