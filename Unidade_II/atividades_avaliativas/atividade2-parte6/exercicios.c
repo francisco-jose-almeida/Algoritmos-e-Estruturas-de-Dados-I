@@ -124,11 +124,11 @@ void desenharEntidade(Entidade *e) {
 }
 
 /* ---- arquivo de TEXTO: histórico de pontuação (fprintf/fscanf) ---- */
-void salvarPlacarTexto(int pontuacao) {
+void salvarPlacarTexto(char* nome, int pontuacao) {
     FILE *arquivo = fopen(ARQUIVO_PLACAR, "a"); // "a": anexa ao final, modo texto
     if (arquivo == NULL) return;
 
-    fprintf(arquivo, "%d\n", pontuacao);
+    fprintf(arquivo, "%s:%d\n",nome, pontuacao);
     fclose(arquivo);
 }
 
@@ -137,8 +137,10 @@ int lerMelhorPontuacao(void) {
     FILE *arquivo = fopen(ARQUIVO_PLACAR, "r"); // "r": leitura, modo texto
     if (arquivo == NULL) return 0;
 
+	char nome[32];
+
     int melhor = 0, valor = 0;
-    while (fscanf(arquivo, "%d", &valor) == 1) {
+    while (fscanf(arquivo, "%s %d",nome,&valor) == 1) {
         if (valor > melhor) melhor = valor;
     }
     fclose(arquivo);
@@ -184,11 +186,23 @@ bool carregarJogoBinario(void) {
     return true;
 }
 
+bool removerJogoBinario(){
+	return remove("save.bin") ? false : true ;
+}
+
 int main(void) {
     srand((unsigned int)time(NULL));
 
+	char nome[32];
+	int pointer=0;
+	int key;
+
+	int registrando = 1;
+
+
     InitWindow(LARGURA_JANELA, ALTURA_JANELA, "Atividade 6 - Manipulacao de Arquivos (texto e binario)");
     SetTargetFPS(60);
+
 
     Entidade *jogador = criarEntidade(ENTIDADE_JOGADOR,
                                       (Vector2){ LARGURA_JANELA / 2.0f, ALTURA_JANELA / 2.0f });
@@ -210,7 +224,21 @@ int main(void) {
 
     while (!WindowShouldClose()) {
 
-        float vel = 250.0f * GetFrameTime();
+		while(registrando){
+			key=GetKeyPressed();
+
+			if(key!=0){
+				
+				nome[pointer]=key;
+				pointer++;
+
+				if(key==257){
+					registrando = 0;
+				}
+			}
+		}
+	   
+		float vel = 250.0f * GetFrameTime();
         if (IsKeyDown(KEY_RIGHT)) jogador->pos.x += vel;
         if (IsKeyDown(KEY_LEFT))  jogador->pos.x -= vel;
         if (IsKeyDown(KEY_UP))    jogador->pos.y -= vel;
@@ -231,7 +259,7 @@ int main(void) {
         }
 
         if (IsKeyPressed(KEY_F5)) { // salva a pontuação no arquivo de texto
-            salvarPlacarTexto(pontuacao);
+            salvarPlacarTexto(nome, pontuacao);
             if (pontuacao > melhorPontuacao) melhorPontuacao = pontuacao;
             TextCopy(mensagem, "Placar salvo em placar.txt!");
             tempoMensagem = 2.0f;
@@ -249,6 +277,13 @@ int main(void) {
             TextCopy(mensagem, ok ? "Jogo carregado de save.bin!" : "Nenhum save.bin encontrado!");
             tempoMensagem = 2.0f;
         }
+
+        if (IsKeyPressed(KEY_DELETE)) { // remove o estado do jogo do arquivo binário
+            bool ok = removerJogoBinario();
+            TextCopy(mensagem, ok ? "Jogo removido de save.bin!" : "Nenhum save.bin encontrado!");
+            tempoMensagem = 2.0f;
+        }
+
 
         if (tempoMensagem > 0.0f) tempoMensagem -= GetFrameTime();
 
