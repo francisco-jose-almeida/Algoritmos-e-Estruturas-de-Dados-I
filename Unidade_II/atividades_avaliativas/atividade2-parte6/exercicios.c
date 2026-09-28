@@ -197,7 +197,7 @@ int main(void) {
 	int pointer=0;
 	int key;
 
-	int registrando = 1;
+	bool registrando = true;
 
 
     InitWindow(LARGURA_JANELA, ALTURA_JANELA, "Atividade 6 - Manipulacao de Arquivos (texto e binario)");
@@ -223,22 +223,22 @@ int main(void) {
     float tempoMensagem = 0.0f;
 
     while (!WindowShouldClose()) {
+	    if(registrando){
+		key=GetKeyPressed();
 
-		while(registrando){
-			key=GetKeyPressed();
+		if(key!=0){
+			
+			if(key==257){
+				registrando = false;
+			}	
+			
+			nome[pointer]=key;
+			pointer++;
 
-			if(key!=0){
-				
-				nome[pointer]=key;
-				pointer++;
-
-				if(key==257){
-					registrando = 0;
-				}
-			}
+			
 		}
-	   
-		float vel = 250.0f * GetFrameTime();
+	}
+	float vel = 250.0f * GetFrameTime();
         if (IsKeyDown(KEY_RIGHT)) jogador->pos.x += vel;
         if (IsKeyDown(KEY_LEFT))  jogador->pos.x -= vel;
         if (IsKeyDown(KEY_UP))    jogador->pos.y -= vel;
@@ -286,20 +286,23 @@ int main(void) {
 
 
         if (tempoMensagem > 0.0f) tempoMensagem -= GetFrameTime();
-
+	
         BeginDrawing();
             ClearBackground(RAYWHITE);
 
-            for (int i = 0; i < totalEntidades; i++) {
-                desenharEntidade(vetorEntidades[i]);
-            }
+	    if(registrando){
+		DrawText(TextFormat("Digite o nome do Jogador: %s",nome), 20, ALTURA_JANELA/2, 16, DARKGRAY);
+	    }else{
+            	for (int i = 0; i < totalEntidades; i++) {
+               	 desenharEntidade(vetorEntidades[i]);
+            	}
 
-            DrawText(TextFormat("Vida: %d   Pontuacao: %d   Recorde: %d",
-                                 jogador->vida, pontuacao, melhorPontuacao), 10, 10, 22, DARKGRAY);
-            DrawText("F5 salva placar (texto) | F6 salva jogo (binario) | F9 carrega jogo (binario)",
-                      10, 34, 18, GRAY);
-            DrawText("Setas movem o jogador | ESC sai", 10, ALTURA_JANELA - 25, 16, GRAY);
-
+            	DrawText(TextFormat("Vida: %d   Pontuacao: %d   Recorde: %d",
+               	                  jogador->vida, pontuacao, melhorPontuacao), 10, 10, 22, DARKGRAY);
+            	DrawText("F5 salva placar (texto) | F6 salva jogo (binario) | F9 carrega jogo (binario) | DEL deleta jogo(binario)",
+            	          10, 34, 18, GRAY);
+            	DrawText("Setas movem o jogador | ESC sai", 10, ALTURA_JANELA - 25, 16, GRAY);
+	    }
             if (tempoMensagem > 0.0f) {
                 DrawText(mensagem, 10, 58, 20, DARKGREEN);
             }
