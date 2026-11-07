@@ -88,16 +88,16 @@ void executar(Lista *lista,int opcao){
 int main(){
 	Lista lista;
 
-	int opcao=20;
+	int opcao;
 
 	inicializar(&lista);
 
-	while(opcao!=0){
-
+	do{
 		opcao=menu();
-
+		
 		executar(&lista,opcao);
-	}
+		
+	}while(opcao!=0);
 
 	liberarLista(&lista);
 
