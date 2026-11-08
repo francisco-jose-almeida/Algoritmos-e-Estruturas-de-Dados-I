@@ -93,7 +93,10 @@ void removerInicio(Lista *lista){
 		printf("Lista Vazia, Nada a remover!\n");
 		return;
 	}
-
+else if(lista->inicio==lista->fim){
+		lista->inicio=lista->fim=NULL;
+		return;
+	}
 	lista->inicio=lista->inicio->proximo;
 
 	free(lista->inicio->anterior);
@@ -106,8 +109,12 @@ void removerFinal(Lista *lista){
 		printf("Lista Vazia, Nada a remover!\n");
 		return;
 	}
+	else if(lista->inicio==lista->fim){
+		lista->inicio=lista->fim=NULL;
+		return;
+	}
+	lista->fim=lista->fim->anterior;
 
-	lista->fim=lista->fim->anterior;                                                                                                                                                                                                                                                                                         
 	free(lista->fim->proximo);
 
 	lista->fim->proximo=NULL;
@@ -116,17 +123,30 @@ void removerFinal(Lista *lista){
 void removerValor(Lista *lista,int valor){
 	No* atual=lista->inicio;
 
-	if(atual==NULL) return;
+	if(atual==NULL){
+		printf("Lista Vazia, Nada a remover!\n");
+		return;
+	}
 
 	while(atual->proximo != NULL && atual->dado != valor){
 		atual=atual->proximo;
+	}
+
+	if(atual->dado != valor){
+		printf("Elemento nao encotrado!\n");	
+		return;
 	}
 
 	if(atual->anterior == NULL)
 		lista->inicio = atual->proximo;
 	else
 		atual->anterior->proximo=atual->proximo;
-	atual->proximo->anterior=atual->anterior;
+
+	if(atual->proximo == NULL)
+		lista->fim = atual->anterior;
+	else
+		atual->proximo->anterior=atual->anterior;
+	
 	free(atual);
 
 }
