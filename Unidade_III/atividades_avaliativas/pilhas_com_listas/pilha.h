@@ -1,11 +1,12 @@
 typedef struct No{
-	int dado;
-	truct No* proximo;
-} No;
+	    int dado;
+		struct No* proximo;
+}No;
 
 typedef struct Pilha{
-	No* topo;
+	    No* topo;
 }Pilha;
+
 
 void inicializar(Pilha *pilha);
 int estaVazia(Pilha *pilha);
