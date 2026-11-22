@@ -42,7 +42,7 @@ int menu(){
 }
 void executar(Fila *fila,int opcao){	
 	
-	int valor;
+	int* valor=malloc(sizeof(int));
 
 	switch(opcao){
 			case 0:

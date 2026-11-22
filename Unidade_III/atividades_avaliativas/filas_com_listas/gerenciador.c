@@ -3,14 +3,24 @@
 
 #include "fila.h"
 
+typedef struct Tarefa{
+	int id;
+	char descricao[128];
+}Tarefa;
+
 void imprimirTarefas(Fila *fila){
 	No* atual=fila->inicio;
+
+	Tarefa* dado;
 
 	printf("Lista de Tarefas\n"
 			"ID\tDescricao\n");
 	
 	while(atual!=NULL){
-		printf("%d \t %s \n",atual->dado->id,atual->dado->descricao);
+		
+		dado=(Tarefa*)atual->dado;
+
+		printf("%d \t %s \n",dado->id,dado->descricao);
 		atual=atual->proximo;
 	}
 
@@ -54,19 +64,20 @@ int menu(){
 }
 
 int executar(Fila *fila, int opcao){
-	Tipo valor=(Tipo)malloc(sizeof(struct Tarefa));
+	Tarefa* valor= malloc(sizeof(Tarefa));
+	
 	if(valor==NULL) return 2;
 
 	switch(opcao){
 		case 0:
 			break;
 		case 1:{
-			Tipo novo=(Tipo) malloc(sizeof(struct Tarefa));
+			Tarefa* novo= malloc(sizeof(Tarefa));
 
 			if(novo==NULL) return 2;
 
 			printf("Informe o identificador da Tarefa:");
-			scanf("%d",&(novo->id));
+			scanf("%d",&novo->id);
 
 			printf("Informe uma breve descricao da Tarefa:\n");
 			scanf(" %[^\n]",novo->descricao);

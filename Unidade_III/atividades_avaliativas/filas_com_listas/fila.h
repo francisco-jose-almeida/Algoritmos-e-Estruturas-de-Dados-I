@@ -1,7 +1,5 @@
-typedef int Tipo;
-
 typedef struct No{
-	    Tipo dado;
+	    void* dado;
 	    struct No* proximo;
 }No;
 
@@ -14,13 +12,13 @@ void inicializar(Fila *fila);
 
 int estaVazia(Fila *fila);
 
-int enqueue(Fila *fila, Tipo valor);
+int enqueue(Fila *fila, void *valor);
 
-int dequeue(Fila *fila, Tipo *valor);
+int dequeue(Fila *fila, void **valor);
 
-int front(Fila *fila, Tipo *valor);
+int front(Fila *fila, void **valor);
 
-int back(Fila *fila, Tipo *valor);
+int back(Fila *fila, void* *valor);
 
 void imprimirFila(Fila *fila);
 
