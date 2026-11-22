@@ -2,31 +2,10 @@
 #include <stdlib.h>
 
 #include "fila.h"
+#include "tarefas.h"
 
-typedef struct Tarefa{
-	int id;
-	char descricao[128];
-}Tarefa;
 
-void imprimirTarefas(Fila *fila){
-	No* atual=fila->inicio;
-
-	Tarefa* dado;
-
-	printf("Lista de Tarefas\n"
-			"ID\tDescricao\n");
-	
-	while(atual!=NULL){
-		
-		dado=(Tarefa*)atual->dado;
-
-		printf("%d \t %s \n",dado->id,dado->descricao);
-		atual=atual->proximo;
-	}
-
-	printf("\n\n");
-}
-
+//Funcao de tratamento de codigos de erro
 int erro(int error_code){
 	switch(error_code){
 		case 0:
@@ -44,6 +23,7 @@ int erro(int error_code){
 	return error_code;
 }
 
+//Mostra o menu na tela e recebe escolha do usuario
 int menu(){
 
 	int opcao;
@@ -63,43 +43,42 @@ int menu(){
 
 }
 
-int executar(Fila *fila, int opcao){
-	Tarefa* valor= malloc(sizeof(Tarefa));
+//Executa opcao escolhida pelo usuario
+int executar(Tarefas *tarefas, int opcao){
+	int valor;
 	
-	if(valor==NULL) return 2;
-
 	switch(opcao){
 		case 0:
 			break;
-		case 1:{
-			Tarefa* novo= malloc(sizeof(Tarefa));
-
-			if(novo==NULL) return 2;
-
-			printf("Informe o identificador da Tarefa:");
-			scanf("%d",&novo->id);
+		case 1:
+			char* texto=malloc(SIZE_DESC*sizeof(char));
+			
+			printf("Informe o identificador da Tarefa:\n");
+			scanf(" %d",&valor);
 
 			printf("Informe uma breve descricao da Tarefa:\n");
-			scanf(" %[^\n]",novo->descricao);
+			scanf(" %[^\n]",texto);
 
-			if(!erro(enqueue(fila,novo)))
-				printf("\nTarefa Adcionada ao final da fila\n\n");
+			if(!erro(addTarefa(tarefas, valor, texto)))
+				printf("\nTarefa Adcionada \n"
+						"ID\tDescricao\n"
+						"%d\t%s\n\n",valor,texto);	
 			break;
-		}
 		case 2:
-			if(!erro(dequeue(fila,&valor))){
-				printf("Tarefa id:%d Finalizada\n\n",valor->id);
-				free(valor);
+			if(!erro(execProxima(tarefas,&valor,&texto))){
+				printf("Tarefa Executada\n"
+						"ID\tDescricao\n"
+						"%d\t%s\n\n",valor,texto);
 			}
 			break;
 		case 3:
-			if(!erro(front(fila,&valor)))
+			if(!erro(consultProxima(tarefas,&valor,&texto)))
 				printf("Proxima Tarefa:\n"
 						"ID\tDescricao\n"
-						"%d\t%s\n\n",valor->id,valor->descricao);
+						"%d\t%s\n\n",valor,texto);
 			break;
 		case 4:
-			imprimirTarefas(fila);
+			listarTarefas(tarefas);
 			break;
 		default:
 			printf("Opcao Invalida!(%d)\n\n",opcao);
@@ -109,21 +88,26 @@ int executar(Fila *fila, int opcao){
 }
 
 int main(){
-	Fila fila;
+
+	Tarefas tarefas;
 
 	int opcao;
 
-	inicializar(&fila);
+	//Incializando fila
+	inicializarTarefas(&tarefas);
 
 	do{
+		//Funcao menu retorna opcao escolhida pelo usuario
 		opcao=menu();
 
 		printf("\n");
-
-		erro(executar(&fila, opcao));
+	
+		//Funcao executa opcao escolhida e pode retornar codigo de erro
+		erro(executar(&tarefas, opcao));
+	
 	}while(opcao);
 
-	liberarFila(&fila);
+	liberarTarefas(&tarefas);
 
 	printf("Fila Liberada da Memoria\n");
 

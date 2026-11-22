@@ -1,5 +1,5 @@
 typedef struct No{
-	    void* dado;
+	    int dado;
 	    struct No* proximo;
 }No;
 
@@ -12,13 +12,13 @@ void inicializar(Fila *fila);
 
 int estaVazia(Fila *fila);
 
-int enqueue(Fila *fila, void *valor);
+int enqueue(Fila *fila, int valor);
 
-int dequeue(Fila *fila, void **valor);
+int dequeue(Fila *fila, int *valor);
 
-int front(Fila *fila, void **valor);
+int front(Fila *fila, int *valor);
 
-int back(Fila *fila, void* *valor);
+int back(Fila *fila, int *valor);
 
 void imprimirFila(Fila *fila);
 

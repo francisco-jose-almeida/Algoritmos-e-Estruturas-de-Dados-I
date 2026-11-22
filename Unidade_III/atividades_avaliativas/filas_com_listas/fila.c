@@ -11,7 +11,7 @@ int estaVazia(Fila *fila){
 	return fila->inicio==NULL && fila->fim==NULL;
 }
 
-int enqueue(Fila *fila, void *valor){
+int enqueue(Fila *fila, int valor){
 	No* novo= (No*) malloc(sizeof(No));
 
 	if(novo==NULL) return 2;
@@ -30,7 +30,7 @@ int enqueue(Fila *fila, void *valor){
 	return 0;
 }
 
-int dequeue(Fila *fila, void **valor){
+int dequeue(Fila *fila, int *valor){
 	if(estaVazia(fila)){
 		return 1;
 	}
@@ -50,7 +50,7 @@ int dequeue(Fila *fila, void **valor){
 	return 0;
 
 }
-int front(Fila *fila, void **valor){
+int front(Fila *fila, int *valor){
 	if(estaVazia(fila)){
 		return 1;
 	}
@@ -60,7 +60,7 @@ int front(Fila *fila, void **valor){
 	return 0;
 }
 
-int back(Fila *fila,void **valor){
+int back(Fila *fila,int *valor){
 	if(estaVazia(fila)){
 		return 1;
 	}
